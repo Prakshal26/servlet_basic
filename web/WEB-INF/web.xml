@@ -15,4 +15,16 @@
         <servlet-name>AddServlet</servlet-name>
         <url-pattern>/add</url-pattern>
     </servlet-mapping>
+
+    <!-- SInce Add Servlet is calling SquareServlet so we need to crrate a mappping here
+    we can see RequestDispatcher in AddServlet is calling sq, so here sq is mapped to
+    SqServlet and hence square servlet will be called when sq is called.-->
+    <servlet>
+        <servlet-name>SqaureServlet</servlet-name>
+        <servlet-class>com.servletjsp.SqServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>SqaureServlet</servlet-name>
+        <url-pattern>/sq</url-pattern>
+    </servlet-mapping>
 </web-app>
