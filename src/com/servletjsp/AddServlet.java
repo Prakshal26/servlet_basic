@@ -1,10 +1,18 @@
+/*
+There are two ways to send reg from one servlet to another:
+1> RequestDispatcher: Like we are doing now,using RequestDispatcher and then sending the request to Sq servlet. without
+involving the client.
+2> SendRedirect: We will send response from servlet 1 to client and ask client to send request to servlet 2.
+Can be done in 3 ways: Url Pattern, Cookies, Sessions.
+
+ */
+
+
 package com.servletjsp;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.*;
 import java.io.IOException;
 import java.io.PrintWriter;
 
@@ -20,24 +28,21 @@ public class AddServlet extends HttpServlet {
 
         int k= i +j;
 
-        PrintWriter out = res.getWriter();
-        out.println("result is=" +k);
+        //Url Pattern of sendRedirect.
 
-        //Sending Request from one Servlet to another
+        res.sendRedirect("sq?k"+k);
 
-        /*
-        We will set the value in req object as a key value pairs.
-        Here value passsed is k.
-         */
-        req.setAttribute("key",k);
-        //Sending the request to the dispatcher namely sq.
-        //We have to give the mapping in web.xml of this servlet.
-        /*
-        Sq is kind of url,That is in web.xml we are saying when sq url is called then go to
-        SqServlet. We are passing request model from here which have the key as key and value k.
-         */
-        RequestDispatcher requestDispatcher = req.getRequestDispatcher("sq");
-        requestDispatcher.forward(req,res);
+        //Using Session
+        HttpSession session = req.getSession();
+        session.setAttribute("key",k);
+        res.sendRedirect("sq");
+
+        //Using Cookies                          Sending value as a string
+        Cookie cookie = new Cookie("key",k+"");
+        //Add cookie to response object
+        res.addCookie(cookie);
+        res.sendRedirect("sq");
+
 
     }
 }
